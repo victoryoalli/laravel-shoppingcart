@@ -2,19 +2,19 @@
 
 namespace VictorYoalli\Tests\Shoppingcart;
 
+use Illuminate\Auth\Events\Logout;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Session\SessionManager;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Event;
 use Mockery;
+use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\Assert;
 use VictorYoalli\Shoppingcart\Cart;
-use Orchestra\Testbench\TestCase;
-use Illuminate\Auth\Events\Logout;
-use Illuminate\Support\Collection;
 use VictorYoalli\Shoppingcart\CartItem;
-use Illuminate\Support\Facades\Event;
-use Illuminate\Session\SessionManager;
-use Illuminate\Contracts\Auth\Authenticatable;
 use VictorYoalli\Shoppingcart\ShoppingcartServiceProvider;
-use VictorYoalli\Tests\Shoppingcart\Fixtures\ProductModel;
 use VictorYoalli\Tests\Shoppingcart\Fixtures\BuyableProduct;
+use VictorYoalli\Tests\Shoppingcart\Fixtures\ProductModel;
 
 class CartTest extends TestCase
 {
@@ -45,9 +45,9 @@ class CartTest extends TestCase
 
         $app['config']->set('database.default', 'testing');
         $app['config']->set('database.connections.testing', [
-            'driver'   => 'sqlite',
+            'driver' => 'sqlite',
             'database' => ':memory:',
-            'prefix'   => '',
+            'prefix' => '',
         ]);
     }
 
@@ -182,7 +182,7 @@ class CartTest extends TestCase
 
         $cart->add([
             ['id' => 1, 'name' => 'Test item 1', 'qty' => 1, 'price' => 10.00],
-            ['id' => 2, 'name' => 'Test item 2', 'qty' => 1, 'price' => 10.00]
+            ['id' => 2, 'name' => 'Test item 2', 'qty' => 1, 'price' => 10.00],
         ]);
 
         $this->assertEquals(2, $cart->count());
@@ -498,7 +498,7 @@ class CartTest extends TestCase
                 'tax' => 2.10,
                 'subtotal' => 10.0,
                 'options' => [],
-            ]
+            ],
         ], $content->toArray());
     }
 

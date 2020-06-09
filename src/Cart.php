@@ -395,7 +395,7 @@ class Cart
         // $stored = $this->getConnection()->table($this->getTableName())
         //     ->where('identifier', $identifier)->first();
 
-        $storedContent = collect(json_decode($stored->content,true));
+        $storedContent = collect(json_decode($stored->content, true));
 
         $currentInstance = $this->currentInstance();
 

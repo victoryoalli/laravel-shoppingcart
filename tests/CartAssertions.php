@@ -2,8 +2,8 @@
 
 namespace VictorYoalli\Tests\Shoppingcart;
 
-use VictorYoalli\Shoppingcart\Cart;
 use PHPUnit\Framework\Assert as PHPUnit;
+use VictorYoalli\Shoppingcart\Cart;
 
 trait CartAssertions
 {

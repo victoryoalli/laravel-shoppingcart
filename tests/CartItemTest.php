@@ -33,7 +33,7 @@ class CartItemTest extends TestCase
             'qty' => 2,
             'options' => [
                 'size' => 'XL',
-                'color' => 'red'
+                'color' => 'red',
             ],
             'tax' => 0,
             'subtotal' => 20.00,
