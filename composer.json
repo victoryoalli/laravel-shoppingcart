@@ -14,6 +14,7 @@
         }
     ],
     "require": {
+        "php": "^7.4",
         "illuminate/support": "^7.0",
         "illuminate/session": "^7.0",
         "illuminate/events": "^7.0"
@@ -34,6 +35,15 @@
         "psr-4": {
             "VictorYoalli\\Tests\\Shoppingcart\\": "tests/"
         }
+    },
+    "scripts": {
+        "psalm": "vendor/bin/psalm",
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
+        "format": "vendor/bin/php-cs-fixer fix --allow-risky=yes"
+    },
+    "config": {
+        "sort-packages": true
     },
     "extra": {
         "laravel": {
