@@ -1,0 +1,50 @@
+{
+    "name": "victoryoalli/shoppingcart",
+    "description": "Laravel Shoppingcart",
+    "keywords": [
+        "victoryoalli",
+        "shoppingcart",
+        "laravel"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Victor Yoalli",
+            "email": "victoryoalli@gmail.com"
+        }
+    ],
+    "require": {
+        "illuminate/support": "^7.0",
+        "illuminate/session": "^7.0",
+        "illuminate/events": "^7.0"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.16",
+        "orchestra/testbench": "^5.0",
+        "phpunit/phpunit": "^9.0",
+        "psalm/plugin-laravel": "^1.2",
+        "vimeo/psalm": "^3.11"
+    },
+    "autoload": {
+        "psr-4": {
+            "VictorYoalli\\Shoppingcart\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "VictorYoalli\\Tests\\Shoppingcart\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "VictorYoalli\\Shoppingcart\\ShoppingcartServiceProvider"
+            ],
+            "aliases": {
+                "Cart": "VictorYoalli\\Shoppingcart\\CartFacade"
+            }
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
