@@ -402,7 +402,6 @@ class Cart
         $this->instance($stored->instance);
 
         $content = $this->getContent();
-        dd($storedContent);
 
         foreach ($storedContent as $cartItem) {
             $content->put(((object)$cartItem)->rowId, (object)$cartItem);
@@ -483,7 +482,7 @@ class Cart
             $cartItem->setQuantity($qty);
         }
 
-        $cartItem->setTaxRate(config('cart.tax'));
+        $cartItem->setTaxRate(config('shoppingcart.tax'));
 
         return $cartItem;
     }
@@ -542,7 +541,7 @@ class Cart
      */
     // private function getConnectionName()
     // {
-    //     $connection = config('cart.database.connection');
+    //     $connection = config('shoppingcart.database.connection');
 
     //     return is_null($connection) ? config('database.default') : $connection;
     // }
@@ -559,13 +558,13 @@ class Cart
     private function numberFormat($value, $decimals, $decimalPoint, $thousandSeperator)
     {
         if (is_null($decimals)) {
-            $decimals = is_null(config('cart.format.decimals')) ? 2 : config('cart.format.decimals');
+            $decimals = is_null(config('shoppingcart.format.decimals')) ? 2 : config('shoppingcart.format.decimals');
         }
         if (is_null($decimalPoint)) {
-            $decimalPoint = is_null(config('cart.format.decimal_point')) ? '.' : config('cart.format.decimal_point');
+            $decimalPoint = is_null(config('shoppingcart.format.decimal_point')) ? '.' : config('shoppingcart.format.decimal_point');
         }
         if (is_null($thousandSeperator)) {
-            $thousandSeperator = is_null(config('cart.format.thousand_seperator')) ? ',' : config('cart.format.thousand_seperator');
+            $thousandSeperator = is_null(config('shoppingcart.format.thousand_seperator')) ? ',' : config('shoppingcart.format.thousand_seperator');
         }
 
         return number_format($value, $decimals, $decimalPoint, $thousandSeperator);

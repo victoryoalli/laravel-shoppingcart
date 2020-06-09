@@ -1,8 +1,7 @@
 <?php
 
-namespace VictorYoalli\Tests\Shoppingcart;
+namespace VictorYoalli\Shoppingcart\Tests;
 
-use Orchestra\Testbench\TestCase;
 use VictorYoalli\Shoppingcart\CartItem;
 use VictorYoalli\Shoppingcart\ShoppingcartServiceProvider;
 

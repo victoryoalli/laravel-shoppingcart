@@ -4,6 +4,7 @@ namespace VictorYoalli\Shoppingcart;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Support\Arr;
 use VictorYoalli\Shoppingcart\Contracts\Buyable;
 
 class CartItem implements Arrayable, Jsonable
@@ -207,12 +208,12 @@ class CartItem implements Arrayable, Jsonable
      */
     public function updateFromArray(array $attributes)
     {
-        $this->id = array_get($attributes, 'id', $this->id);
-        $this->qty = array_get($attributes, 'qty', $this->qty);
-        $this->name = array_get($attributes, 'name', $this->name);
-        $this->price = array_get($attributes, 'price', $this->price);
+        $this->id = Arr::get($attributes, 'id', $this->id);
+        $this->qty = Arr::get($attributes, 'qty', $this->qty);
+        $this->name = Arr::get($attributes, 'name', $this->name);
+        $this->price = Arr::get($attributes, 'price', $this->price);
         $this->priceTax = $this->price + $this->tax;
-        $this->options = new CartItemOptions(array_get($attributes, 'options', $this->options));
+        $this->options = new CartItemOptions(Arr::get($attributes, 'options', $this->options));
 
         $this->rowId = $this->generateRowId($this->id, $this->options->all());
     }
@@ -302,7 +303,7 @@ class CartItem implements Arrayable, Jsonable
      */
     public static function fromArray(array $attributes)
     {
-        $options = array_get($attributes, 'options', []);
+        $options = Arr::get($attributes, 'options', []);
 
         return new self($attributes['id'], $attributes['name'], $attributes['price'], $options);
     }
@@ -377,15 +378,15 @@ class CartItem implements Arrayable, Jsonable
     private function numberFormat($value, $decimals, $decimalPoint, $thousandSeperator)
     {
         if (is_null($decimals)) {
-            $decimals = is_null(config('cart.format.decimals')) ? 2 : config('cart.format.decimals');
+            $decimals = is_null(config('shoppingcart.format.decimals')) ? 2 : config('shoppingcart.format.decimals');
         }
 
         if (is_null($decimalPoint)) {
-            $decimalPoint = is_null(config('cart.format.decimal_point')) ? '.' : config('cart.format.decimal_point');
+            $decimalPoint = is_null(config('shoppingcart.format.decimal_point')) ? '.' : config('shoppingcart.format.decimal_point');
         }
 
         if (is_null($thousandSeperator)) {
-            $thousandSeperator = is_null(config('cart.format.thousand_seperator')) ? ',' : config('cart.format.thousand_seperator');
+            $thousandSeperator = is_null(config('shoppingcart.format.thousand_seperator')) ? ',' : config('shoppingcart.format.thousand_seperator');
         }
 
         return number_format($value, $decimals, $decimalPoint, $thousandSeperator);

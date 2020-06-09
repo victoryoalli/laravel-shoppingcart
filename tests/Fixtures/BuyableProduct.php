@@ -1,6 +1,6 @@
 <?php
 
-namespace VictorYoalli\Tests\Shoppingcart\Fixtures;
+namespace VictorYoalli\Shoppingcart\Tests\Fixtures;
 
 use VictorYoalli\Shoppingcart\Contracts\Buyable;
 

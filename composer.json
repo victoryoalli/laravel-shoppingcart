@@ -33,7 +33,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "VictorYoalli\\Tests\\Shoppingcart\\": "tests/"
+            "VictorYoalli\\Shoppingcart\\Tests\\": "tests/"
         }
     },
     "scripts": {

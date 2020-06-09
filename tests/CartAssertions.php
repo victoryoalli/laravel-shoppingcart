@@ -1,6 +1,6 @@
 <?php
 
-namespace VictorYoalli\Tests\Shoppingcart;
+namespace VictorYoalli\Shoppingcart\Tests;
 
 use PHPUnit\Framework\Assert as PHPUnit;
 use VictorYoalli\Shoppingcart\Cart;

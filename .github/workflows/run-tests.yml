@@ -34,6 +34,10 @@ jobs:
           php-version: ${{ matrix.php }}
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick
           coverage: none
+      - name: Create Database
+        run:
+          sudo /etc/init.d/mysql start
+          mysql -u root -proot -e 'CREATE DATABASE IF NOT EXISTS shoppingcart_package;'
 
       - name: Install dependencies
         run: |
@@ -42,3 +46,6 @@ jobs:
 
       - name: Execute tests
         run: vendor/bin/phpunit
+        env:
+          DB_PORT: ${{ job.services.mysql.ports[3306] }}
+          DB_PASSWORD: root
