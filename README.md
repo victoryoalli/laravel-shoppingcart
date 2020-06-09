@@ -367,11 +367,11 @@ The cart also has events build in. There are five events available for you to li
 
 | Event         | Fired                                    | Parameter                        |
 | ------------- | ---------------------------------------- | -------------------------------- |
-| cart.added    | When an item was added to the cart.      | The `CartItem` that was added.   |
-| cart.updated  | When an item in the cart was updated.    | The `CartItem` that was updated. |
-| cart.removed  | When an item is removed from the cart.   | The `CartItem` that was removed. |
-| cart.stored   | When the content of a cart was stored.   | -                                |
-| cart.restored | When the content of a cart was restored. | -                                |
+| CartAdded     | When an item was added to the cart.      | The `CartItem` that was added.   |
+| CartUpdated   | When an item in the cart was updated.    | The `CartItem` that was updated. |
+| CartRemoved   | When an item is removed from the cart.   | The `CartItem` that was removed. |
+| CartStored    | When the content of a cart was stored.   | -                                |
+| CartRestored  | When the content of a cart was restored. | -                                |
 
 ## Example
 
