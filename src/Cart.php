@@ -4,7 +4,6 @@ namespace VictorYoalli\Shoppingcart;
 
 use Closure;
 use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Database\DatabaseManager;
 use Illuminate\Session\SessionManager;
 use Illuminate\Support\Collection;
 use VictorYoalli\Shoppingcart\Contracts\Buyable;
@@ -13,7 +12,6 @@ use VictorYoalli\Shoppingcart\Events\CartRemoved;
 use VictorYoalli\Shoppingcart\Events\CartRestored;
 use VictorYoalli\Shoppingcart\Events\CartStored;
 use VictorYoalli\Shoppingcart\Events\CartUpdated;
-use VictorYoalli\Shoppingcart\Exceptions\CartAlreadyStoredException;
 use VictorYoalli\Shoppingcart\Exceptions\InvalidRowIDException;
 use VictorYoalli\Shoppingcart\Exceptions\UnknownModelException;
 use VictorYoalli\Shoppingcart\Models\Shoppingcart;
@@ -374,20 +372,26 @@ class Cart
     public function restore($identifier):?self
     {
         $currentInstance = $this->currentInstance();
-        if (! $this->storedCartWithIdentifierExists($identifier,$currentInstance)) {
+        if (! $this->storedCartWithIdentifierExists($identifier, $currentInstance)) {
             return $this;
         }
 
         $stored = Shoppingcart::whereInstance($currentInstance)->whereIdentifier($identifier)->first();
 
-        $storedContent = collect(json_decode($stored->content, true));
+        $storedContent = json_decode($stored->content, true);
 
         // $this->instance($stored->instance);
 
         $content = $this->getContent();
+        // dd($content);
 
         foreach ($storedContent as $cartItem) {
-            $content->put(((object)$cartItem)->rowId, (object)$cartItem);
+            $cartItem = (object) $cartItem;
+            if ($cartItem) {
+                $cartItem = $this->createCartItem($cartItem->id, $cartItem->name, $cartItem->qty, $cartItem->price, $cartItem->options, $cartItem->modelType);
+                $content->put(($cartItem)->rowId, $cartItem);
+                // dump($cartItem);
+            }
         }
 
         event(new CartRestored());
@@ -448,7 +452,7 @@ class Cart
      * @param array     $options
      * @return \VictorYoalli\Shoppingcart\CartItem
      */
-    private function createCartItem($id, $name, $qty, $price, array $options)
+    private function createCartItem($id, $name, $qty, $price, array $options, $model_type = null)
     {
         if ($id instanceof Buyable) {
             $cartItem = CartItem::fromBuyable($id, $qty ?: []);
@@ -458,7 +462,7 @@ class Cart
             $cartItem = CartItem::fromArray($id);
             $cartItem->setQuantity($id['qty']);
         } else {
-            $cartItem = CartItem::fromAttributes($id, $name, $price, $options);
+            $cartItem = CartItem::fromAttributes($id, $name, $price, $options, $model_type);
             $cartItem->setQuantity($qty);
         }
 
@@ -486,7 +490,7 @@ class Cart
      * @param $identifier
      * @return bool
      */
-    private function storedCartWithIdentifierExists($identifier,$instance = Cart::DEFAULT_INSTANCE)
+    private function storedCartWithIdentifierExists($identifier, $instance = Cart::DEFAULT_INSTANCE)
     {
         return Shoppingcart::whereInstance($instance)->whereIdentifier($identifier)->exists();
     }

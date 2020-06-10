@@ -56,7 +56,7 @@ class CartItem implements Arrayable, Jsonable
      *
      * @var string|null
      */
-    private $associatedModel = null;
+    public $modelType = null;
 
     /**
      * The tax rate for the cart item.
@@ -73,7 +73,7 @@ class CartItem implements Arrayable, Jsonable
      * @param float      $price
      * @param array      $options
      */
-    public function __construct($id, $name, $price, array $options = [])
+    public function __construct($id, $name, $price, array $options = [], string $model_type = null)
     {
         if (empty($id)) {
             throw new \InvalidArgumentException('Please supply a valid identifier.');
@@ -90,6 +90,7 @@ class CartItem implements Arrayable, Jsonable
         $this->price = floatval($price);
         $this->options = new CartItemOptions($options);
         $this->rowId = $this->generateRowId($id, $options);
+        $this->modelType = $model_type;
     }
 
     /**
@@ -226,7 +227,7 @@ class CartItem implements Arrayable, Jsonable
      */
     public function associate($model)
     {
-        $this->associatedModel = is_string($model) ? $model : get_class($model);
+        $this->modelType = is_string($model) ? $model : get_class($model);
 
         return $this;
     }
@@ -276,8 +277,8 @@ class CartItem implements Arrayable, Jsonable
             return $this->tax * $this->qty;
         }
 
-        if ($attribute === 'model' && isset($this->associatedModel)) {
-            return with(new $this->associatedModel)->find($this->id);
+        if ($attribute === 'model' && isset($this->modelType)) {
+            return with(new $this->modelType)->find($this->id);
         }
 
         return null;
@@ -317,9 +318,9 @@ class CartItem implements Arrayable, Jsonable
      * @param array      $options
      * @return \VictorYoalli\Shoppingcart\CartItem
      */
-    public static function fromAttributes($id, $name, $price, array $options = [])
+    public static function fromAttributes($id, $name, $price, array $options = [], string $model_type = null)
     {
-        return new self($id, $name, $price, $options);
+        return new self($id, $name, $price, $options, $model_type);
     }
 
     /**
@@ -352,6 +353,7 @@ class CartItem implements Arrayable, Jsonable
             'options' => $this->options->toArray(),
             'tax' => $this->tax,
             'subtotal' => $this->subtotal,
+            'modelType' => $this->modelType,
         ];
     }
 

@@ -73,7 +73,6 @@ class CartTest extends TestCase
         $this->app->afterResolving('migrator', function ($migrator) {
             $migrator->path(realpath(__DIR__.'/../database/migrations'));
         });
-
     }
 
     /** @test */
@@ -505,6 +504,7 @@ class CartTest extends TestCase
                 'tax' => 2.10,
                 'subtotal' => 10.0,
                 'options' => [],
+                'modelType' => BuyableProduct::class,
             ],
             '370d08585360f5c568b18d1f2e4ca1df' => [
                 'rowId' => '370d08585360f5c568b18d1f2e4ca1df',
@@ -515,6 +515,7 @@ class CartTest extends TestCase
                 'tax' => 2.10,
                 'subtotal' => 10.0,
                 'options' => [],
+                'modelType' => BuyableProduct::class,
             ],
         ], $content->toArray());
     }
@@ -618,7 +619,7 @@ class CartTest extends TestCase
 
         $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
 
-        $this->assertObjectHasAttribute('associatedModel', $cartItem);
+        $this->assertObjectHasAttribute('modelType', $cartItem);
         // $this->assertContains(BuyableProduct::class, );
     }
 
@@ -634,8 +635,30 @@ class CartTest extends TestCase
         $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
 
 
-        $this->assertObjectHasAttribute('associatedModel', $cartItem);
-        // $this->assertEquals(ProductModel::class, Assert::readAttribute($cartItem, 'associatedModel'));
+        $this->assertObjectHasAttribute('modelType', $cartItem);
+        // $this->assertEquals(ProductModel::class, Assert::readAttribute($cartItem, 'modelType'));
+    }
+
+    /** @test */
+    public function it_can_restore_with_associate_item_with_a_model()
+    {
+        $cart = $this->getCart();
+
+        $cart->add(1, 'Test item', 1, 10.00);
+
+        $cart->associate('027c91341fd5cf4d2579b49c4b6a90da', new ProductModel);
+
+        $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
+
+
+        $this->assertObjectHasAttribute('modelType', $cartItem);
+
+        $cart->store($identifier = 123);
+        $cart->destroy();
+
+        $cart->restore($identifier = 123);
+        $this->assertEquals(ProductModel::class, $cart->content()->first()->modelType);
+        $this->assertNotNull($cart->content()->first()->model);
     }
 
     /**
@@ -976,6 +999,7 @@ class CartTest extends TestCase
 
         event(new Logout('web', $user));
     }
+
 
     /**
      * Get an instance of the cart.
