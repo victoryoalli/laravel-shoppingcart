@@ -34,10 +34,10 @@ class CartTest extends TestCase
      * @param \Illuminate\Foundation\Application $app
      * @return array
      */
-    protected function getPackageProviders($app)
-    {
-        return [ShoppingcartServiceProvider::class];
-    }
+    // protected function getPackageProviders($app)
+    // {
+    //     return [ShoppingcartServiceProvider::class];
+    // }
 
     // /**
     //  * Define environment setup.
@@ -67,10 +67,13 @@ class CartTest extends TestCase
     public function setUp():void
     {
         parent::setUp();
+        parent::getEnvironmentSetUp($this->app);
+        parent::getPackageProviders($this->app);
 
         $this->app->afterResolving('migrator', function ($migrator) {
             $migrator->path(realpath(__DIR__.'/../database/migrations'));
         });
+
     }
 
     /** @test */
@@ -810,7 +813,7 @@ class CartTest extends TestCase
     }
 
     /** @test */
-    public function it_can_store_the_cart_in_a_database()
+    public function it_can_store_default_the_cart_in_a_database()
     {
         // $this->artisan('migrate', [
         //     '--database' => 'testing',
@@ -827,7 +830,27 @@ class CartTest extends TestCase
         $serialized = serialize($cart->content());
 
         // $this->assertDatabaseHas(config('shoppingcart.database.table'), ['identifier' => $identifier, 'instance' => 'default', 'content' => $serialized]);
-        $this->assertDatabaseHas(config('shoppingcart.database.table'), ['identifier' => $identifier, 'instance' => 'default']);
+        $this->assertDatabaseHas(config('shoppingcart.database.table'), ['identifier' => $identifier, 'instance' => Cart::DEFAULT_INSTANCE]);
+
+        Event::assertDispatched(CartStored::class);
+    }
+
+    /** @test */
+    public function it_can_store_other_intance_the_cart_in_a_database()
+    {
+        Event::fake();
+
+        $instance = 'other';
+        $cart = $this->getCart()->instance($instance);
+
+        $cart->add(new BuyableProduct);
+
+        $cart->store($identifier = 123);
+
+        $serialized = serialize($cart->content());
+
+        // $this->assertDatabaseHas(config('shoppingcart.database.table'), ['identifier' => $identifier, 'instance' => 'default', 'content' => $serialized]);
+        $this->assertDatabaseHas(config('shoppingcart.database.table'), ['identifier' => $identifier, 'instance' => $instance]);
 
         Event::assertDispatched(CartStored::class);
     }
@@ -857,7 +880,7 @@ class CartTest extends TestCase
     }
 
     /** @test */
-    public function it_can_restore_a_cart_from_the_database()
+    public function it_can_restore_a_default_cart_from_the_database()
     {
         Event::fake();
 
@@ -875,18 +898,41 @@ class CartTest extends TestCase
 
         $this->assertItemsInCart(1, $cart);
 
-        $this->assertDatabaseHas(config('shoppingcart.database.table'), ['identifier' => $identifier, 'instance' => 'default']);
+        $this->assertDatabaseHas(config('shoppingcart.database.table'), ['identifier' => $identifier, 'instance' => Cart::DEFAULT_INSTANCE]);
 
         Event::assertDispatched(CartRestored::class);
     }
 
     /** @test */
+    public function it_can_restore_other_a_cart_from_the_database()
+    {
+        Event::fake();
+
+        $instance = 'other';
+
+        $cart = $this->getCart()->instance($instance);
+
+        $cart->add(new BuyableProduct);
+
+        $cart->store($identifier = 123);
+
+        $cart->destroy();
+
+        $this->assertItemsInCart(0, $cart);
+
+        $cart->restore($identifier);
+
+        $this->assertItemsInCart(1, $cart);
+
+        $this->assertDatabaseHas(config('shoppingcart.database.table'), ['identifier' => $identifier, 'instance' => $instance]);
+
+        Event::assertDispatched(CartRestored::class);
+    }
+
+
+    /** @test */
     public function it_will_just_keep_the_current_instance_if_no_cart_with_the_given_identifier_was_stored()
     {
-        // $this->artisan('migrate', [
-        //     '--database' => 'testing',
-        // ]);
-
         $cart = $this->getCart();
 
         $cart->restore($identifier = 123);
@@ -923,7 +969,7 @@ class CartTest extends TestCase
         $this->app['config']->set('shoppingcart.destroy_on_logout', true);
 
         $this->app->instance(SessionManager::class, Mockery::mock(SessionManager::class, function ($mock) {
-            $mock->shouldReceive('forget')->once()->with('cart');
+            $mock->shouldReceive('forget')->once()->with('shoppingcart');
         }));
 
         $user = Mockery::mock(Authenticatable::class);

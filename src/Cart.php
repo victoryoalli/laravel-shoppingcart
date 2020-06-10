@@ -67,7 +67,7 @@ class Cart
     {
         $instance = $instance ?: self::DEFAULT_INSTANCE;
 
-        $this->instance = sprintf('%s.%s', 'cart', $instance);
+        $this->instance = sprintf('%s.%s', 'shoppingcart', $instance);
 
         return $this;
     }
@@ -79,7 +79,7 @@ class Cart
      */
     public function currentInstance()
     {
-        return str_replace('cart.', '', $this->instance);
+        return str_replace('shoppingcart.', '', $this->instance);
     }
 
     /**
@@ -110,7 +110,6 @@ class Cart
 
         $content->put($cartItem->rowId, $cartItem);
 
-        // $this->events->fire('cart.added', $cartItem);
         event(new CartAdded($cartItem));
 
         $this->session->put($this->instance, $content);
@@ -156,7 +155,6 @@ class Cart
             $content->put($cartItem->rowId, $cartItem);
         }
 
-        // $this->events->fire('cart.updated', $cartItem);
         event(new CartUpdated($cartItem));
 
         $this->session->put($this->instance, $content);
@@ -178,7 +176,6 @@ class Cart
 
         $content->pull($cartItem->rowId);
 
-        // $this->events->fire('cart.removed', $cartItem);
         event(new CartRemoved($cartItem));
 
         $this->session->put($this->instance, $content);
@@ -361,19 +358,8 @@ class Cart
     {
         $content = $this->getContent();
 
-        // if ($this->storedCartWithIdentifierExists($identifier)) {
-        //     throw new CartAlreadyStoredException("A cart with identifier {$identifier} was already stored.");
-        // }
-
         Shoppingcart::updateOrCreate(['identifier' => $identifier,'instance' => $this->currentInstance()], ['content' => json_encode($content)]);
 
-        // $this->getConnection()->table($this->getTableName())->insert([
-        //     'identifier' => $identifier,
-        //     'instance' => $this->currentInstance(),
-        //     'content' => json_encode($content),
-        // ]);
-
-        // $this->events->fire('cart.stored');
         event(new CartStored());
 
         return $this;
@@ -387,19 +373,16 @@ class Cart
      */
     public function restore($identifier):?self
     {
-        if (! $this->storedCartWithIdentifierExists($identifier)) {
+        $currentInstance = $this->currentInstance();
+        if (! $this->storedCartWithIdentifierExists($identifier,$currentInstance)) {
             return $this;
         }
 
-        $stored = Shoppingcart::whereIdentifier($identifier)->first();
-        // $stored = $this->getConnection()->table($this->getTableName())
-        //     ->where('identifier', $identifier)->first();
+        $stored = Shoppingcart::whereInstance($currentInstance)->whereIdentifier($identifier)->first();
 
         $storedContent = collect(json_decode($stored->content, true));
 
-        $currentInstance = $this->currentInstance();
-
-        $this->instance($stored->instance);
+        // $this->instance($stored->instance);
 
         $content = $this->getContent();
 
@@ -407,16 +390,13 @@ class Cart
             $content->put(((object)$cartItem)->rowId, (object)$cartItem);
         }
 
-        // $this->events->fire('cart.restored');
         event(new CartRestored());
 
         $this->session->put($this->instance, $content);
 
-        $this->instance($currentInstance);
+        // $this->instance($currentInstance);
 
-        // $this->getConnection()->table($this->getTableName())
-        //     ->where('identifier', $identifier)->delete();
-        Shoppingcart::whereIdentifier($identifier)->whereInstance($currentInstance);
+        // Shoppingcart::whereIdentifier($identifier)->whereInstance($currentInstance);
 
         return $this;
     }
@@ -506,45 +486,10 @@ class Cart
      * @param $identifier
      * @return bool
      */
-    private function storedCartWithIdentifierExists($identifier)
+    private function storedCartWithIdentifierExists($identifier,$instance = Cart::DEFAULT_INSTANCE)
     {
-        return Shoppingcart::whereIdentifier($identifier)->exists();
-        // return $this->getConnection()->table($this->getTableName())->where('identifier', $identifier)->exists();
+        return Shoppingcart::whereInstance($instance)->whereIdentifier($identifier)->exists();
     }
-
-    /**
-     * Get the database connection.
-     *
-     * @return \Illuminate\Database\Connection
-     */
-    // private function getConnection()
-    // {
-    //     $connectionName = $this->getConnectionName();
-
-    //     return app(DatabaseManager::class)->connection($connectionName);
-    // }
-
-    /**
-     * Get the database table name.
-     *
-     * @return string
-     */
-    // private function getTableName()
-    // {
-    //     return config('shoppingcart.database.table', 'shoppingcart');
-    // }
-
-    /**
-     * Get the database connection name.
-     *
-     * @return string
-     */
-    // private function getConnectionName()
-    // {
-    //     $connection = config('shoppingcart.database.connection');
-
-    //     return is_null($connection) ? config('database.default') : $connection;
-    // }
 
     /**
      * Get the Formated number

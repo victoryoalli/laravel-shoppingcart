@@ -4,7 +4,7 @@ namespace VictorYoalli\Shoppingcart\Tests;
 
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as Orchestra;
-use VictorYoalli\Skeleton\SkeletonServiceProvider;
+use VictorYoalli\Shoppingcart\ShoppingcartServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -12,13 +12,13 @@ class TestCase extends Orchestra
     {
         parent::setUp();
 
-        $this->withFactories(__DIR__.'/database/factories');
+        // $this->withFactories(__DIR__.'/database/factories');
     }
 
     protected function getPackageProviders($app)
     {
         return [
-            SkeletonServiceProvider::class,
+            ShoppingcartServiceProvider::class,
         ];
     }
 
