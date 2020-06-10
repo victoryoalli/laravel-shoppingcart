@@ -654,10 +654,13 @@ class CartTest extends TestCase
         $this->assertObjectHasAttribute('modelType', $cartItem);
 
         $cart->store($identifier = 123);
+
         $cart->destroy();
 
         $cart->restore($identifier = 123);
+
         $this->assertEquals(ProductModel::class, $cart->content()->first()->modelType);
+
         $this->assertNotNull($cart->content()->first()->model);
     }
 
