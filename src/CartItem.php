@@ -45,9 +45,16 @@ class CartItem implements Arrayable, Jsonable
     public $price;
 
     /**
+     * The price with TAX of the cart item
+     *
+     * @var float
+     */
+    public $priceTax;
+
+    /**
      * The options for this cart item.
      *
-     * @var array
+     * @var \VictorYoalli\Shoppingcart\CartItemOptions
      */
     public $options;
 
@@ -73,16 +80,13 @@ class CartItem implements Arrayable, Jsonable
      * @param float      $price
      * @param array      $options
      */
-    public function __construct($id, $name, $price, array $options = [], string $model_type = null)
+    public function __construct($id, string $name, float $price, array $options = [], string $model_type = null)
     {
         if (empty($id)) {
             throw new \InvalidArgumentException('Please supply a valid identifier.');
         }
         if (empty($name)) {
             throw new \InvalidArgumentException('Please supply a valid name.');
-        }
-        if (strlen($price) < 0 || ! is_numeric($price)) {
-            throw new \InvalidArgumentException('Please supply a valid price.');
         }
 
         $this->id = $id;
@@ -326,7 +330,7 @@ class CartItem implements Arrayable, Jsonable
     /**
      * Generate a unique id for the cart item.
      *
-     * @param string $id
+     * @param string|int $id
      * @param array  $options
      * @return string
      */

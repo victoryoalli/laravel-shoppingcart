@@ -88,7 +88,7 @@ class Cart
      * @param int|float $qty
      * @param float     $price
      * @param array     $options
-     * @return \VictorYoalli\Shoppingcart\CartItem
+     * @return
      */
     public function add($id, $name = null, $qty = null, $price = null, array $options = [])
     {
@@ -148,7 +148,7 @@ class Cart
         if ($cartItem->qty <= 0) {
             $this->remove($cartItem->rowId);
 
-            return;
+            return $cartItem;
         } else {
             $content->put($cartItem->rowId, $cartItem);
         }
@@ -164,7 +164,7 @@ class Cart
      * Remove the cart item with the given rowId from the cart.
      *
      * @param string $rowId
-     * @return void
+     * @return \VictorYoalli\Shoppingcart\CartItem
      */
     public function remove($rowId)
     {
@@ -177,6 +177,8 @@ class Cart
         event(new CartRemoved($cartItem));
 
         $this->session->put($this->instance, $content);
+
+        return $cartItem;
     }
 
     /**
@@ -223,7 +225,7 @@ class Cart
     /**
      * Get the number of items in the cart.
      *
-     * @return int|float
+     * @return int|string
      */
     public function count()
     {
@@ -257,7 +259,7 @@ class Cart
      * @param int    $decimals
      * @param string $decimalPoint
      * @param string $thousandSeperator
-     * @return float
+     * @return string
      */
     public function tax($decimals = null, $decimalPoint = null, $thousandSeperator = null)
     {
@@ -276,7 +278,7 @@ class Cart
      * @param int    $decimals
      * @param string $decimalPoint
      * @param string $thousandSeperator
-     * @return float
+     * @return string
      */
     public function subtotal($decimals = null, $decimalPoint = null, $thousandSeperator = null)
     {
@@ -350,7 +352,7 @@ class Cart
      * Store an the current instance of the cart.
      *
      * @param mixed $identifier
-     * @return void
+     * @return \VictorYoalli\Shoppingcart\Cart|null
      */
     public function store($identifier):?self
     {
@@ -367,7 +369,7 @@ class Cart
      * Restore the cart with the given identifier.
      *
      * @param mixed $identifier
-     * @return void
+     * @return \VictorYoalli\Shoppingcart\Cart|null
      */
     public function restore($identifier):?self
     {
@@ -380,27 +382,17 @@ class Cart
 
         $storedContent = json_decode($stored->content, true);
 
-        // $this->instance($stored->instance);
-
         $content = $this->getContent();
-        // dd($content);
 
         foreach ($storedContent as $cartItem) {
             $cartItem = (object) $cartItem;
-            if ($cartItem) {
-                $cartItem = $this->createCartItem($cartItem->id, $cartItem->name, $cartItem->qty, $cartItem->price, $cartItem->options, $cartItem->modelType);
-                $content->put(($cartItem)->rowId, $cartItem);
-                // dump($cartItem);
-            }
+            $cartItem = $this->createCartItem($cartItem->id, $cartItem->name, $cartItem->qty, $cartItem->price, $cartItem->options, $cartItem->modelType);
+            $content->put(($cartItem)->rowId, $cartItem);
         }
 
         event(new CartRestored());
 
         $this->session->put($this->instance, $content);
-
-        // $this->instance($currentInstance);
-
-        // Shoppingcart::whereIdentifier($identifier)->whereInstance($currentInstance);
 
         return $this;
     }
@@ -409,7 +401,7 @@ class Cart
      * Magic method to make accessing the total, tax and subtotal properties possible.
      *
      * @param string $attribute
-     * @return float|null
+     * @return string|null
      */
     public function __get($attribute)
     {
