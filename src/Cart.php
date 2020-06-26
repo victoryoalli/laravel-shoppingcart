@@ -90,7 +90,7 @@ class Cart
      * @param array     $options
      * @return
      */
-    public function add($id, $name = null, $qty = null, $price = null, array $options = [])
+    public function add($id, $name = null, $qty = null, $price = null, array $options = [], $model_type = null)
     {
         if ($this->isMulti($id)) {
             return array_map(function ($item) {
@@ -98,7 +98,7 @@ class Cart
             }, $id);
         }
 
-        $cartItem = $this->createCartItem($id, $name, $qty, $price, $options);
+        $cartItem = $this->createCartItem($id, $name, $qty, $price, $options, $model_type);
 
         $content = $this->getContent();
 
