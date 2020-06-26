@@ -88,9 +88,10 @@ class Cart
      * @param int|float $qty
      * @param float     $price
      * @param array     $options
+     * @param string|null $model_type
      * @return
      */
-    public function add($id, $name = null, $qty = null, $price = null, array $options = [], $model_type = null)
+    public function add($id, $name = null, $qty = null, $price = null, array $options = [], ?string $model_type = null)
     {
         if ($this->isMulti($id)) {
             return array_map(function ($item) {
@@ -247,7 +248,9 @@ class Cart
         $content = $this->getContent();
 
         $total = $content->reduce(function ($total, CartItem $cartItem) {
-            return $total + ($cartItem->qty * $cartItem->priceTax);
+            $total = $total + ($cartItem->qty * ($cartItem->priceTax));
+
+            return $total;
         }, 0);
 
         return $this->numberFormat($total, $decimals, $decimalPoint, $thousandSeperator);
@@ -444,7 +447,7 @@ class Cart
      * @param array     $options
      * @return \VictorYoalli\Shoppingcart\CartItem
      */
-    private function createCartItem($id, $name, $qty, $price, array $options, $model_type = null)
+    private function createCartItem($id, $name, $qty, $price, array $options, ?string $model_type = null)
     {
         if ($id instanceof Buyable) {
             $cartItem = CartItem::fromBuyable($id, $qty ?: []);

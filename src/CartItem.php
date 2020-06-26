@@ -49,7 +49,7 @@ class CartItem implements Arrayable, Jsonable
      *
      * @var float
      */
-    public $priceTax;
+    // public $priceTax;
 
     /**
      * The options for this cart item.
@@ -79,8 +79,9 @@ class CartItem implements Arrayable, Jsonable
      * @param string     $name
      * @param float      $price
      * @param array      $options
+     * @param string|null      $model_type
      */
-    public function __construct($id, string $name, float $price, array $options = [], string $model_type = null)
+    public function __construct($id, string $name, float $price, array $options = [], ?string $model_type = null)
     {
         if (empty($id)) {
             throw new \InvalidArgumentException('Please supply a valid identifier.');
@@ -202,7 +203,7 @@ class CartItem implements Arrayable, Jsonable
         $this->id = $item->getBuyableIdentifier($this->options);
         $this->name = $item->getBuyableDescription($this->options);
         $this->price = $item->getBuyablePrice($this->options);
-        $this->priceTax = $this->price + $this->tax;
+        // $this->priceTax = $this->price + $this->tax;
     }
 
     /**
@@ -217,7 +218,7 @@ class CartItem implements Arrayable, Jsonable
         $this->qty = Arr::get($attributes, 'qty', $this->qty);
         $this->name = Arr::get($attributes, 'name', $this->name);
         $this->price = Arr::get($attributes, 'price', $this->price);
-        $this->priceTax = $this->price + $this->tax;
+        // $this->priceTax = $this->price + $this->tax;
         $this->options = new CartItemOptions(Arr::get($attributes, 'options', $this->options));
 
         $this->rowId = $this->generateRowId($this->id, $this->options->all());

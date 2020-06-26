@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Event;
 use InvalidArgumentException;
 use Mockery;
 use PHPUnit\Framework\Assert;
+use TypeError;
 use VictorYoalli\Shoppingcart\Cart;
 use VictorYoalli\Shoppingcart\CartItem;
 use VictorYoalli\Shoppingcart\Events\CartAdded;
@@ -242,9 +243,10 @@ class CartTest extends TestCase
     public function it_will_validate_the_name()
     {
         $this->expectException(InvalidArgumentException::class);
+        // $this->expectException(TypeError::class);
         $cart = $this->getCart();
 
-        $cart->add(1, null, 1, 10.00);
+        $cart->add(1, '', 1, 10.00);
     }
 
     /**
@@ -255,6 +257,7 @@ class CartTest extends TestCase
     public function it_will_validate_the_quantity()
     {
         $this->expectException(InvalidArgumentException::class);
+        // $this->expectException(TypeError::class);
         $cart = $this->getCart();
 
         $cart->add(1, 'Some title', 'invalid', 10.00);
@@ -267,7 +270,7 @@ class CartTest extends TestCase
      */
     public function it_will_validate_the_price()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(TypeError::class);
         $cart = $this->getCart();
 
         $cart->add(1, 'Some title', 1, 'invalid');
