@@ -1,7 +1,7 @@
 ## LaravelShoppingcart
 
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/victoryoalli/shoppingcart.svg?style=flat-square)](https://packagist.org/packages/victoryoalli/shoppingcart)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/victoryoalli/laravel-shoppingcart.svg?style=flat-square)](https://packagist.org/packages/victoryoalli/shoppingcart)
 [![Build Status](https://img.shields.io/travis/victoryoalli/shoppingcart/master.svg?style=flat-square)](https://travis-ci.org/victoryoalli/shoppingcart)
 [![Quality Score](https://img.shields.io/scrutinizer/g/victoryoalli/shoppingcart.svg?style=flat-square)](https://scrutinizer-ci.com/g/victoryoalli/shoppingcart)
 [![Total Downloads](https://img.shields.io/packagist/dt/victoryoalli/shoppingcart.svg?style=flat-square)](https://packagist.org/packages/victoryoalli/shoppingcart)
