@@ -400,16 +400,16 @@ class Cart
         return $this;
     }
 
-    public function sync(callable $fnItem){
+    public function sync(callable $fnItem)
+    {
         $items = $this->content();
-        collect($items)->each(function($item) use($fnItem){
-            $result = (object)$fnItem($item,$this->updated_at);
-            if($result->is_deleted){
+        collect($items)->each(function ($item) use ($fnItem) {
+            $result = (object)$fnItem($item, $this->updated_at);
+            if ($result->is_deleted) {
                 $this->remove($result->rowId);
-            }else{
-                $this->update($result->rowId,(array)$result);
+            } else {
+                $this->update($result->rowId, (array)$result);
             }
-           
         });
     }
 
