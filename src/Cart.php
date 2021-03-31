@@ -396,7 +396,7 @@ class Cart
         event(new CartRestored());
 
         $this->session->put($this->instance, $content);
-        
+
         return $this;
     }
 

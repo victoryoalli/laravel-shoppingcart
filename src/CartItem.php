@@ -94,7 +94,8 @@ class CartItem implements Arrayable, Jsonable
         $this->name = $name;
         $this->price = floatval($price);
         $this->options = new CartItemOptions($options);
-        $this->rowId = $this->generateRowId($id, $options);
+        $mixed = array_merge(['model_type' => $model_type], $options);
+        $this->rowId = $this->generateRowId($id, $mixed);
         $this->modelType = $model_type;
     }
 
@@ -221,7 +222,8 @@ class CartItem implements Arrayable, Jsonable
         // $this->priceTax = $this->price + $this->tax;
         $this->options = new CartItemOptions(Arr::get($attributes, 'options', $this->options));
 
-        $this->rowId = $this->generateRowId($this->id, $this->options->all());
+        $mixed = array_merge(['model_type' => $this->modelType], $this->options->all());
+        $this->rowId = $this->generateRowId($this->id, array_merge(['name' => $this->name], $mixed));
     }
 
     /**
@@ -229,9 +231,11 @@ class CartItem implements Arrayable, Jsonable
      *
      * @param mixed $model
      * @return \VictorYoalli\Shoppingcart\CartItem
+     * @deprecated 0.1.2
      */
     public function associate($model)
     {
+        throw new \Exception('deprecated. use add with model_name');
         $this->modelType = is_string($model) ? $model : get_class($model);
 
         return $this;
