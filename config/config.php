@@ -1,5 +1,7 @@
 <?php
 
+use VictorYoalli\Shoppingcart\Models\Shoppingcart;
+
 return [
 
     /*
@@ -31,6 +33,8 @@ return [
         'table' => 'shoppingcarts',
 
     ],
+
+    'shoppingcart_model' => Shoppingcart::class,
 
     /*
     |--------------------------------------------------------------------------

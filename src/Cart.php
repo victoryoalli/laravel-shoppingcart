@@ -14,10 +14,13 @@ use VictorYoalli\Shoppingcart\Events\CartStored;
 use VictorYoalli\Shoppingcart\Events\CartUpdated;
 use VictorYoalli\Shoppingcart\Exceptions\InvalidRowIDException;
 use VictorYoalli\Shoppingcart\Exceptions\UnknownModelException;
-use VictorYoalli\Shoppingcart\Models\Shoppingcart;
+use VictorYoalli\Shoppingcart\Models\Concerns\UsesShoppingcartModel;
 
 class Cart
 {
+
+    use UsesShoppingcartModel;
+
     const DEFAULT_INSTANCE = 'default';
 
     /**
@@ -361,7 +364,7 @@ class Cart
     {
         $content = $this->getContent();
 
-        Shoppingcart::updateOrCreate(['identifier' => $identifier,'instance' => $this->currentInstance()], ['content' => json_encode($content)]);
+        $this->getShoppingcartModel()::updateOrCreate(['identifier' => $identifier,'instance' => $this->currentInstance()], ['content' => json_encode($content)]);
 
         event(new CartStored());
 
@@ -381,7 +384,7 @@ class Cart
             return $this;
         }
 
-        $stored = Shoppingcart::whereInstance($currentInstance)->whereIdentifier($identifier)->first();
+        $stored = $this->getShoppingcartModel()::whereInstance($currentInstance)->whereIdentifier($identifier)->first();
 
         $storedContent = json_decode($stored->content, true);
 
@@ -500,7 +503,7 @@ class Cart
      */
     private function storedCartWithIdentifierExists($identifier, $instance = Cart::DEFAULT_INSTANCE)
     {
-        return Shoppingcart::whereInstance($instance)->whereIdentifier($identifier)->exists();
+        return $this->getShoppingcartModel()::whereInstance($instance)->whereIdentifier($identifier)->exists();
     }
 
     /**
