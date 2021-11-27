@@ -18,10 +18,9 @@ use VictorYoalli\Shoppingcart\Models\Concerns\UsesShoppingcartModel;
 
 class Cart
 {
-
     use UsesShoppingcartModel;
 
-    const DEFAULT_INSTANCE = 'default';
+    public const DEFAULT_INSTANCE = 'default';
 
     /**
      * Instance of the session manager.
@@ -360,7 +359,7 @@ class Cart
      * @param mixed $identifier
      * @return \VictorYoalli\Shoppingcart\Cart|null
      */
-    public function store($identifier):?self
+    public function store($identifier): ?self
     {
         $content = $this->getContent();
 
@@ -377,7 +376,7 @@ class Cart
      * @param mixed $identifier
      * @return \VictorYoalli\Shoppingcart\Cart|null
      */
-    public function restore($identifier):?self
+    public function restore($identifier): ?self
     {
         $currentInstance = $this->currentInstance();
         if (! $this->storedCartWithIdentifierExists($identifier, $currentInstance)) {
@@ -448,7 +447,7 @@ class Cart
     {
         $content = $this->session->has($this->instance)
             ? $this->session->get($this->instance)
-            : new Collection;
+            : new Collection();
 
         return $content;
     }

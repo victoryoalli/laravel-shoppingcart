@@ -1,4 +1,5 @@
 <?php
+
 namespace VictorYoalli\Shoppingcart;
 
 use Illuminate\Support\Facades\Facade;

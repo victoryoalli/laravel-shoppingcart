@@ -27,7 +27,8 @@ use VictorYoalli\Shoppingcart\Tests\Fixtures\ProductModel;
 
 class CartTest extends TestCase
 {
-    use CartAssertions, RefreshDatabase;
+    use CartAssertions;
+    use RefreshDatabase;
 
     /**
      * Set the package service provider.
@@ -65,7 +66,7 @@ class CartTest extends TestCase
      *
      * @return void
      */
-    public function setUp():void
+    public function setUp(): void
     {
         parent::setUp();
         parent::getEnvironmentSetUp($this->app);
@@ -104,7 +105,7 @@ class CartTest extends TestCase
 
         $cart = $this->getCart();
 
-        $cart->add(new BuyableProduct);
+        $cart->add(new BuyableProduct());
 
         $this->assertEquals(1, $cart->count());
 
@@ -118,7 +119,7 @@ class CartTest extends TestCase
 
         $cart = $this->getCart();
 
-        $cartItem = $cart->add(new BuyableProduct);
+        $cartItem = $cart->add(new BuyableProduct());
 
         $this->assertInstanceOf(CartItem::class, $cartItem);
         $this->assertEquals('027c91341fd5cf4d2579b49c4b6a90da', $cartItem->rowId);
@@ -210,7 +211,7 @@ class CartTest extends TestCase
 
         $options = ['size' => 'XL', 'color' => 'red'];
 
-        $cart->add(new BuyableProduct, 1, $options);
+        $cart->add(new BuyableProduct(), 1, $options);
 
         $cartItem = $cart->get('07d5da5550494c62daf9993cf954303f');
 
@@ -281,7 +282,7 @@ class CartTest extends TestCase
     {
         $cart = $this->getCart();
 
-        $item = new BuyableProduct;
+        $item = new BuyableProduct();
 
         $cart->add($item);
         $cart->add($item);
@@ -295,7 +296,7 @@ class CartTest extends TestCase
     {
         $cart = $this->getCart();
 
-        $item = new BuyableProduct;
+        $item = new BuyableProduct();
 
         $cart->add($item);
         $cart->add($item);
@@ -312,7 +313,7 @@ class CartTest extends TestCase
 
         $cart = $this->getCart();
 
-        $cart->add(new BuyableProduct);
+        $cart->add(new BuyableProduct());
 
         $cart->update('027c91341fd5cf4d2579b49c4b6a90da', 2);
 
@@ -329,7 +330,7 @@ class CartTest extends TestCase
 
         $cart = $this->getCart();
 
-        $cart->add(new BuyableProduct);
+        $cart->add(new BuyableProduct());
 
         $cart->update('027c91341fd5cf4d2579b49c4b6a90da', new BuyableProduct(1, 'Different description'));
 
@@ -346,7 +347,7 @@ class CartTest extends TestCase
 
         $cart = $this->getCart();
 
-        $cart->add(new BuyableProduct);
+        $cart->add(new BuyableProduct());
 
         $cart->update('027c91341fd5cf4d2579b49c4b6a90da', ['name' => 'Different description']);
 
@@ -365,7 +366,7 @@ class CartTest extends TestCase
         $this->expectException(InvalidRowIDException::class);
         $cart = $this->getCart();
 
-        $cart->add(new BuyableProduct);
+        $cart->add(new BuyableProduct());
 
         $cart->update('none-existing-rowid', new BuyableProduct(1, 'Different description'));
     }
@@ -375,7 +376,7 @@ class CartTest extends TestCase
     {
         $cart = $this->getCart();
 
-        $cart->add(new BuyableProduct, 1, ['color' => 'red']);
+        $cart->add(new BuyableProduct(), 1, ['color' => 'red']);
 
         $cart->update('ea65e0bdcd1967c4b3149e9e780177c0', ['options' => ['color' => 'blue']]);
 
@@ -389,8 +390,8 @@ class CartTest extends TestCase
     {
         $cart = $this->getCart();
 
-        $cart->add(new BuyableProduct, 1, ['color' => 'red']);
-        $cart->add(new BuyableProduct, 1, ['color' => 'blue']);
+        $cart->add(new BuyableProduct(), 1, ['color' => 'red']);
+        $cart->add(new BuyableProduct(), 1, ['color' => 'blue']);
 
         $cart->update('7e70a1e9aaadd18c72921a07aae5d011', ['options' => ['color' => 'red']]);
 
@@ -405,7 +406,7 @@ class CartTest extends TestCase
 
         $cart = $this->getCart();
 
-        $cart->add(new BuyableProduct);
+        $cart->add(new BuyableProduct());
 
         $cart->remove('027c91341fd5cf4d2579b49c4b6a90da');
 
@@ -422,7 +423,7 @@ class CartTest extends TestCase
 
         $cart = $this->getCart();
 
-        $cart->add(new BuyableProduct);
+        $cart->add(new BuyableProduct());
 
         $cart->update('027c91341fd5cf4d2579b49c4b6a90da', 0);
 
@@ -439,7 +440,7 @@ class CartTest extends TestCase
 
         $cart = $this->getCart();
 
-        $cart->add(new BuyableProduct);
+        $cart->add(new BuyableProduct());
 
         $cart->update('027c91341fd5cf4d2579b49c4b6a90da', -1);
 
@@ -454,7 +455,7 @@ class CartTest extends TestCase
     {
         $cart = $this->getCart();
 
-        $cart->add(new BuyableProduct);
+        $cart->add(new BuyableProduct());
 
         $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
 
@@ -528,7 +529,7 @@ class CartTest extends TestCase
     {
         $cart = $this->getCart();
 
-        $cart->add(new BuyableProduct);
+        $cart->add(new BuyableProduct());
 
         $this->assertItemsInCart(1, $cart);
 
@@ -618,7 +619,7 @@ class CartTest extends TestCase
     {
         $cart = $this->getCart();
 
-        $cart->add(new BuyableProduct);
+        $cart->add(new BuyableProduct());
 
         $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
 
@@ -633,7 +634,7 @@ class CartTest extends TestCase
 
         $cart->add(1, 'Test item', 1, 10.00);
 
-        $cart->associate('027c91341fd5cf4d2579b49c4b6a90da', new ProductModel);
+        $cart->associate('027c91341fd5cf4d2579b49c4b6a90da', new ProductModel());
 
         $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
 
@@ -649,7 +650,7 @@ class CartTest extends TestCase
 
         $cart->add(1, 'Test item', 1, 10.00);
 
-        $cart->associate('027c91341fd5cf4d2579b49c4b6a90da', new ProductModel);
+        $cart->associate('027c91341fd5cf4d2579b49c4b6a90da', new ProductModel());
 
         $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
 
@@ -689,7 +690,7 @@ class CartTest extends TestCase
 
         $cart->add(1, 'Test item', 1, 10.00);
 
-        $cart->associate('027c91341fd5cf4d2579b49c4b6a90da', new ProductModel);
+        $cart->associate('027c91341fd5cf4d2579b49c4b6a90da', new ProductModel());
 
         $cartItem = $cart->get('027c91341fd5cf4d2579b49c4b6a90da');
 
@@ -852,7 +853,7 @@ class CartTest extends TestCase
 
         $cart = $this->getCart();
 
-        $cart->add(new BuyableProduct);
+        $cart->add(new BuyableProduct());
 
         $cart->store($identifier = 123);
 
@@ -872,7 +873,7 @@ class CartTest extends TestCase
         $instance = 'other';
         $cart = $this->getCart()->instance($instance);
 
-        $cart->add(new BuyableProduct);
+        $cart->add(new BuyableProduct());
 
         $cart->store($identifier = 123);
 
@@ -899,7 +900,7 @@ class CartTest extends TestCase
 
         $cart = $this->getCart();
 
-        $cart->add(new BuyableProduct);
+        $cart->add(new BuyableProduct());
 
         $cart->store($identifier = 123);
 
@@ -915,7 +916,7 @@ class CartTest extends TestCase
 
         $cart = $this->getCart();
 
-        $cart->add(new BuyableProduct);
+        $cart->add(new BuyableProduct());
 
         $cart->store($identifier = 123);
 
@@ -941,7 +942,7 @@ class CartTest extends TestCase
 
         $cart = $this->getCart()->instance($instance);
 
-        $cart->add(new BuyableProduct);
+        $cart->add(new BuyableProduct());
 
         $cart->store($identifier = 123);
 

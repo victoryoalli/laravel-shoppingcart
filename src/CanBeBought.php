@@ -4,7 +4,6 @@ namespace VictorYoalli\Shoppingcart;
 
 trait CanBeBought
 {
-
     /**
      * Get the identifier of the Buyable item.
      *
