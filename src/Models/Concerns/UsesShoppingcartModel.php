@@ -8,7 +8,7 @@ trait UsesShoppingcartModel
 {
     public function getShoppingcartModel(): Model
     {
-        $modelClass = config('shoppingcart.shoppingcart_model');
+        $modelClass = (string) config('shoppingcart.shoppingcart_model');
 
         return new $modelClass();
     }

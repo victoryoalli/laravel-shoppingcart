@@ -236,9 +236,6 @@ class CartItem implements Arrayable, Jsonable
     public function associate($model)
     {
         throw new \Exception('deprecated. use add with model_name');
-        $this->modelType = is_string($model) ? $model : get_class($model);
-
-        return $this;
     }
 
     /**
