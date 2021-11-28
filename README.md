@@ -1,9 +1,9 @@
 ## LaravelShoppingcart
 
-
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/victoryoalli/laravel-shoppingcart)
 ![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/victoryoalli/laravel-shoppingcart)
 ![Packagist Downloads](https://img.shields.io/packagist/dt/victoryoalli/laravel-shoppingcart)
+
 A simple shoppingcart implementation for Laravel.
 
 ## Installation
