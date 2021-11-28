@@ -4,8 +4,7 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/victoryoalli/laravel-shoppingcart.svg?style=flat-square)](https://packagist.org/packages/victoryoalli/laravel-shoppingcart)
 [![Build Status](https://img.shields.io/travis/victoryoalli/shoppingcart/master.svg?style=flat-square)](https://travis-ci.org/victoryoalli/laravel-shoppingcart)
 [![Quality Score](https://img.shields.io/scrutinizer/g/victoryoalli/shoppingcart.svg?style=flat-square)](https://scrutinizer-ci.com/g/victoryoalli/laravel-shoppingcart)
-[![Total Downloads](https://img.shields.io/packagist/dt/victoryoalli/shoppingcart.svg?style=flat-square)](https://packagist.org/packages/victoryoalli/laravel-shoppingcart)
-
+![Packagist Downloads](https://img.shields.io/packagist/dt/victoryoalli/laravel-shoppingcart)
 A simple shoppingcart implementation for Laravel.
 
 ## Installation
