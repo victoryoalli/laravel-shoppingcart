@@ -1,33 +1,45 @@
 name: Psalm
 
 on:
-    push:
-        paths:
-            - '**.php'
-            - 'psalm.xml'
+  push:
+    branches: [main]
+    paths:
+      - '**.php'
+      - 'psalm.xml'
+  pull_request:
+    paths:
+      - '**.php'
+      - 'psalm.xml'
 
 jobs:
-    psalm:
-        name: psalm
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v1
+  psalm:
+    name: Psalm Static Analysis
+    runs-on: ubuntu-latest
 
-            - name: Setup PHP
-              uses: shivammathur/setup-php@v2
-              with:
-                  php-version: '7.4'
-                  extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick
-                  coverage: none
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-            - name: Cache composer dependencies
-              uses: actions/cache@v1
-              with:
-                  path: vendor
-                  key: composer-${{ hashFiles('composer.lock') }}
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
+          coverage: none
 
-            - name: Run composer install
-              run: composer install -n --prefer-dist
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-            - name: Run psalm
-              run: ./vendor/bin/psalm -c psalm.xml
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: composer-${{ hashFiles('composer.json') }}
+          restore-keys: composer-
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Run Psalm
+        run: ./vendor/bin/psalm --output-format=github
