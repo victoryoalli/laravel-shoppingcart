@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Package Overview
 
-Laravel Shoppingcart is a shopping cart package for Laravel 10/11 applications. It provides cart management with session storage, database persistence, tax calculations, and event dispatching.
+Laravel Shoppingcart is a shopping cart package for Laravel 10/11/12 applications. It provides cart management with session storage, database persistence, tax calculations, and event dispatching.
 
 ## Common Commands
 
