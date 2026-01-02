@@ -223,7 +223,7 @@ class CartItem implements Arrayable, Jsonable
         $this->options = new CartItemOptions(Arr::get($attributes, 'options', $this->options));
 
         $mixed = array_merge(['model_type' => $this->modelType], $this->options->all());
-        $this->rowId = $this->generateRowId($this->id, array_merge(['name' => $this->name], $mixed));
+        $this->rowId = $this->generateRowId($this->id, $mixed);
     }
 
     /**
@@ -295,11 +295,12 @@ class CartItem implements Arrayable, Jsonable
      *
      * @param \VictorYoalli\Shoppingcart\Contracts\Buyable $item
      * @param array                                      $options
+     * @param string|null                                $model_type
      * @return \VictorYoalli\Shoppingcart\CartItem
      */
-    public static function fromBuyable(Buyable $item, array $options = [])
+    public static function fromBuyable(Buyable $item, array $options = [], ?string $model_type = null)
     {
-        return new self($item->getBuyableIdentifier($options), $item->getBuyableDescription($options), $item->getBuyablePrice($options), $options);
+        return new self($item->getBuyableIdentifier($options), $item->getBuyableDescription($options), $item->getBuyablePrice($options), $options, $model_type);
     }
 
     /**

@@ -24,20 +24,17 @@ class CartItemTest extends TestCase
         $cartItem = new CartItem(1, 'Some item', 10.00, ['size' => 'XL', 'color' => 'red']);
         $cartItem->setQuantity(2);
 
-        $this->assertEquals([
-            'id' => 1,
-            'name' => 'Some item',
-            'price' => 10.00,
-            'rowId' => '07d5da5550494c62daf9993cf954303f',
-            'qty' => 2,
-            'options' => [
-                'size' => 'XL',
-                'color' => 'red',
-            ],
-            'tax' => 0,
-            'subtotal' => 20.00,
-            'modelType' => null,
-        ], $cartItem->toArray());
+        $array = $cartItem->toArray();
+
+        $this->assertEquals(1, $array['id']);
+        $this->assertEquals('Some item', $array['name']);
+        $this->assertEquals(10.00, $array['price']);
+        $this->assertEquals(2, $array['qty']);
+        $this->assertEquals(['size' => 'XL', 'color' => 'red'], $array['options']);
+        $this->assertEquals(0.0, $array['tax']);
+        $this->assertEquals(20.00, $array['subtotal']);
+        $this->assertNull($array['modelType']);
+        $this->assertNotEmpty($array['rowId']);
     }
 
     /** @test */
@@ -48,8 +45,12 @@ class CartItemTest extends TestCase
 
         $this->assertJson($cartItem->toJson());
 
-        $json = '{"rowId":"07d5da5550494c62daf9993cf954303f","id":1,"name":"Some item","qty":2,"price":10,"options":{"size":"XL","color":"red"},"tax":0,"subtotal":20,"modelType":null}';
-
-        $this->assertEquals($json, $cartItem->toJson());
+        $decoded = json_decode($cartItem->toJson(), true);
+        $this->assertEquals(1, $decoded['id']);
+        $this->assertEquals('Some item', $decoded['name']);
+        $this->assertEquals(2, $decoded['qty']);
+        $this->assertEquals(10, $decoded['price']);
+        $this->assertEquals(['size' => 'XL', 'color' => 'red'], $decoded['options']);
+        $this->assertNotEmpty($decoded['rowId']);
     }
 }

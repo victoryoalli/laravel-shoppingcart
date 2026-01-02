@@ -324,7 +324,7 @@ class Cart
 
         $cartItem = $this->get($rowId);
 
-        $cartItem->associate($model);
+        $cartItem->modelType = is_object($model) ? get_class($model) : $model;
 
         $content = $this->getContent();
 
@@ -465,9 +465,8 @@ class Cart
     private function createCartItem($id, $name, $qty, $price, array $options, ?string $model_type = null)
     {
         if ($id instanceof Buyable) {
-            $cartItem = CartItem::fromBuyable($id, $qty ?: []);
+            $cartItem = CartItem::fromBuyable($id, $qty ?: [], get_class($id));
             $cartItem->setQuantity($name ?: 1);
-            $cartItem->associate($id);
         } elseif (is_array($id)) {
             $cartItem = CartItem::fromArray($id);
             $cartItem->setQuantity($id['qty']);

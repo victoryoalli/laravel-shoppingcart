@@ -43,13 +43,10 @@ class ShoppingcartServiceProvider extends ServiceProvider
             ], 'lang');*/
 
             //Migrations
-            if (! class_exists('CreateShoppingcartTable')) {
-                // Publish the migration
-                $timestamp = date('Y_m_d_His', time());
-                $this->publishes([
-                    __DIR__.'/../database/migrations/create_shoppingcart_table.stub' => database_path('migrations/'.$timestamp.'_create_shoppingcart_table.php'),
-                ], 'migrations');
-            }
+            $timestamp = date('Y_m_d_His', time());
+            $this->publishes([
+                __DIR__.'/../database/migrations/create_shoppingcart_table.stub' => database_path('migrations/'.$timestamp.'_create_shoppingcart_table.php'),
+            ], 'migrations');
 
             // Registering package commands.
             // $this->commands([]);
