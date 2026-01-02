@@ -1,8 +1,11 @@
 ## LaravelShoppingcart
 
-![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/victoryoalli/laravel-shoppingcart)
-![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/victoryoalli/laravel-shoppingcart)
-![Packagist Downloads](https://img.shields.io/packagist/dt/victoryoalli/laravel-shoppingcart)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/victoryoalli/laravel-shoppingcart.svg)](https://packagist.org/packages/victoryoalli/laravel-shoppingcart)
+[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/victoryoalli/laravel-shoppingcart)](https://github.com/victoryoalli/laravel-shoppingcart/releases)
+[![PHP Version Support](https://img.shields.io/packagist/php-v/victoryoalli/laravel-shoppingcart)](https://packagist.org/packages/victoryoalli/laravel-shoppingcart)
+[![Laravel Version Support](https://img.shields.io/badge/Laravel-10.x%20|%2011.x%20|%2012.x-red.svg)](https://laravel.com)
+[![License](https://img.shields.io/packagist/l/victoryoalli/laravel-shoppingcart.svg)](https://packagist.org/packages/victoryoalli/laravel-shoppingcart)
+[![Total Downloads](https://img.shields.io/packagist/dt/victoryoalli/laravel-shoppingcart.svg)](https://packagist.org/packages/victoryoalli/laravel-shoppingcart)
 
 A simple shoppingcart implementation for Laravel.
 
