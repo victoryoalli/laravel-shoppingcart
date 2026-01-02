@@ -6,6 +6,11 @@
 
 A simple shoppingcart implementation for Laravel.
 
+## Requirements
+
+- PHP 8.1+
+- Laravel 10.x or 11.x
+
 ## Installation
 
 Install the package through [Composer](http://getcomposer.org/).
@@ -300,12 +305,6 @@ $cartItem = Cart::add('293ad', 'Product 1', 1, 9.99, ['size' => 'large']);
 
 // Next we associate a model with the item.
 Cart::associate($cartItem->rowId, 'Product');
-
-// Or even easier, call the associate method on the CartItem!
-$cartItem->associate('Product');
-
-// You can even make it a one-liner
-Cart::add('293ad', 'Product 1', 1, 9.99, ['size' => 'large'])->associate('Product');
 
 // Now, when iterating over the content of the cart, you can access the model.
 foreach(Cart::content() as $row) {
