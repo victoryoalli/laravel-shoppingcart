@@ -2,6 +2,7 @@
 
 namespace VictorYoalli\Shoppingcart\Tests;
 
+use PHPUnit\Framework\Attributes\Test;
 use VictorYoalli\Shoppingcart\CartItem;
 use VictorYoalli\Shoppingcart\ShoppingcartServiceProvider;
 
@@ -18,7 +19,7 @@ class CartItemTest extends TestCase
         return [ShoppingcartServiceProvider::class];
     }
 
-    /** @test */
+    #[Test]
     public function it_can_be_cast_to_an_array()
     {
         $cartItem = new CartItem(1, 'Some item', 10.00, ['size' => 'XL', 'color' => 'red']);
@@ -37,7 +38,7 @@ class CartItemTest extends TestCase
         $this->assertNotEmpty($array['rowId']);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_be_cast_to_json()
     {
         $cartItem = new CartItem(1, 'Some item', 10.00, ['size' => 'XL', 'color' => 'red']);
