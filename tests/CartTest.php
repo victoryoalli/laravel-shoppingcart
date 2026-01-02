@@ -10,7 +10,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Event;
 use InvalidArgumentException;
 use Mockery;
-use PHPUnit\Framework\Assert;
 use TypeError;
 use VictorYoalli\Shoppingcart\Cart;
 use VictorYoalli\Shoppingcart\CartItem;
